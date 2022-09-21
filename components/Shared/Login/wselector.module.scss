@@ -1,0 +1,36 @@
+.wselector {
+	border: 1px solid black;
+	border-radius: 20px;
+	overflow: hidden;
+}
+
+.wbtn {
+	border: 0;
+	border-radius: 0;
+	border-top: 1px solid black;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 0 30px;
+	width: 100%;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 22px;
+	height: 80px;
+
+	&:first-child {
+		border-top: 0;
+	}
+
+	&:active, &:focus, &:hover {
+		color: rgba(black, .6);
+		border-color: black;
+	}
+}
+
+.wicon {
+	width: 40px;
+	height: auto;
+	display: inline-block;
+	margin-right: 16px;
+}

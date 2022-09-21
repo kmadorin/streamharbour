@@ -1,0 +1,14 @@
+.header {
+	padding: 20px;
+	background: white;
+	height: auto;
+	line-height: normal;
+}
+
+.layout {
+	background-color: white;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: stretch;
+}

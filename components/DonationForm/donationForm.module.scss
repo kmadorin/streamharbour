@@ -1,0 +1,68 @@
+.form {
+	padding: 30px;
+	border: 2px solid rgba(0, 0, 0, 0.1);
+	box-shadow: 0 10px 80px rgba(0, 0, 0, 0.1);
+	border-radius: 20px;
+}
+
+.title {
+	margin-bottom: 20px;
+	font-size: 32px;
+	line-height: 41px;
+}
+
+.currency {
+	display: flex;
+	justify-content: stretch;
+	align-items: center;
+
+	&__select {
+		width: 170px;
+	}
+
+	&__input {
+		flex-grow: 1;
+		margin-left: 30px;
+	}
+}
+
+.message {
+	margin-bottom: 50px;
+
+	&__input {
+		resize: none;
+	}
+
+	&__item {
+		margin-bottom: 0;
+		position: relative;
+	}
+
+	&__counter {
+		color: rgba(black, .3);
+		font-weight: 400;
+		font-size: 18px;
+		display: inline-block;
+		position: absolute;
+		bottom: 15px;
+		right: 5px;
+	}
+}
+
+.paybtn {
+	height: 70px;
+	//display: flex;
+	//justify-content: space-between;
+	//align-items: center;
+	font-size: 18px;
+}
+
+.allowanceBtn {
+	margin-bottom: 20px;
+}
+
+.select {
+	&--default {
+		text-transform: none !important;
+	}
+}
