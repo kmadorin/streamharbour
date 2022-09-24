@@ -1,3 +1,39 @@
 .layout {
 	padding: 50px 20px;
 }
+
+.subscriptionCard {
+	margin-top: 20px;
+
+	&:first-child {
+		margin-top: 0;
+	}
+}
+
+.row {
+	@media (min-width: 992px) {
+		flex-wrap: nowrap;
+	}
+}
+
+.leftCol {
+	min-width: 344px;
+	@media (max-width: 991px) {
+		margin-top: 20px;
+	}
+}
+
+.centerCol {
+	@media (min-width: 992px) {
+		width: auto;
+		flex-grow: 1;
+	}
+
+	@media (max-width: 991px) {
+		margin-bottom: 20px;
+	}
+}
+
+.rightCol {
+	min-width: 344px;
+}

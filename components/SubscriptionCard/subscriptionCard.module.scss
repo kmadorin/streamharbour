@@ -1,0 +1,42 @@
+.card {
+	border: 2px solid rgba(0, 0, 0, 0.1);
+	border-radius: 20px;
+	padding: 30px;
+	background-color: #fff;
+}
+
+.title {
+	font-size: 24px;
+	line-height: 31px;
+	margin-bottom: 15px;
+	font-weight: 700;
+}
+
+.info {
+	display: block;
+	font-size: 14px;
+	line-height: 20px;
+	font-weight: 400;
+	margin-bottom: 26px;
+}
+
+.price {
+	display: block;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 41px;
+	vertical-align: middle;
+	margin-bottom: 25px;
+}
+
+.amount {
+	font-weight: 700;
+	font-size: 32px;
+	display: inline-block;
+	vertical-align: middle;
+
+}
+
+.duration {
+	display: inline-block;
+}
