@@ -55,7 +55,7 @@ export default function DonationForm() {
 		token: token?.address
 	});
 
-	console.log(`###: tokenBalance`, tokenBalance);
+	// console.log(`###: tokenBalance`, tokenBalance);
 
 	const MAX_MESSAGE_LENGTH = 255;
 
@@ -66,7 +66,7 @@ export default function DonationForm() {
 		chainId: 1,
 	})
 
-	console.log(`###: streamerName`, streamerName);
+	// console.log(`###: streamerName`, streamerName);
 
 
 	const { data: streamerAddress } = useEnsAddress({
@@ -79,8 +79,8 @@ export default function DonationForm() {
 		chainId: 1,
 	})
 
-	console.log(`###: streamerAddress`, streamerAddress)
-	console.log(`###: streamerAvatar`, streamerAvatar);
+	// console.log(`###: streamerAddress`, streamerAddress)
+	// console.log(`###: streamerAvatar`, streamerAvatar);
 
 	const {config: sendNativeTransactionConfig} = usePrepareSendTransaction({
 		request: {
