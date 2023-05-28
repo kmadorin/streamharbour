@@ -3,7 +3,7 @@ import {Token} from '@uniswap/sdk';
 import toast from "react-hot-toast";
 
 const {Option} = Select;
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 const {Title} = Typography;
 const {TextArea} = Input;
@@ -33,10 +33,14 @@ import {
 	PUBLIC_URL,
 	CHAIN_ID
 } from '../../constants';
+import AppContext from "../utils/AppContext";
 
 export default function DonationForm() {
+	const {etherspotSDK} = useContext(AppContext);
 	const {data: signer} = useSigner();
 	const {address, isConnecting, isDisconnected} = useAccount();
+	const [isEtherspotAccountConnected, setIsEtherspotAccountConnected] = useState(false);
+	const [isSendingTransaction, setIsSendingTransaction] = useState(false);
 	const [tokenList, setTokenList] = useState([])
 	const [tokens, setTokens] = useState([]);
 	const [nativeToken, setNativeToken] = useState(null);
@@ -77,7 +81,7 @@ export default function DonationForm() {
 	const { data:streamerAvatar} = useEnsAvatar({
 		addressOrName: 'brantly.eth',
 		chainId: 1,
-	})
+	});
 
 	// console.log(`###: streamerAddress`, streamerAddress)
 	// console.log(`###: streamerAvatar`, streamerAvatar);
@@ -158,7 +162,6 @@ export default function DonationForm() {
 			})
 
 			const _tokens = tokenListToObject(filteredTokens);
-			console.log(`###: _tokens`, _tokens);
 			setTokens(_tokens)
 
 
@@ -183,6 +186,7 @@ export default function DonationForm() {
 
 	async function sendTip(values) {
 		const {user, currency, message} = values;
+		setIsSendingTransaction(true);
 
 		const messageData = {
 			user,
@@ -199,45 +203,70 @@ export default function DonationForm() {
 
 			setTransactionData(data)
 
-			sendTransactionAsync().then(() => {
+			try {
+				const value = amount && typeof amount === 'number' ? ethers.utils.parseEther(amount.toString()) : 0;
+				await etherspotSDK.batchExecuteAccountTransaction({
+					to: StreamharbourContract.address,
+					value,
+					data
+				});
+
+				await etherspotSDK.estimateGatewayBatch({
+					to: StreamharbourContract.address,
+					value: amount && typeof amount === 'number' ? ethers.utils.parseEther(amount.toString()) : 0,
+					data
+				});
+
+				const submissionResponse = await etherspotSDK
+					.submitGatewayBatch()
+
 				toast.success('Your tip has been successfully send!')
-				resetForm();
-			}).catch(e => {
+				console.log(`###: submissionResponse`, submissionResponse);
+			} catch (e) {
+				console.log(e);
 				toast.error('Something went wrong');
+			} finally {
 				resetForm();
-			});
+			}
+
 		} else {
 			// check allowance
 
 			const parsedAmount = ethers.utils.parseUnits(amount.toString(), token.decimals)
-			console.log(`###: tokenAllowance.toString()`, tokenAllowance.toString());
-			console.log(`###: parsedAmount.toString()`, parsedAmount.toString());
-			console.log(`###: tokenContract`, tokenContract);
 
-			console.log(`###: ethers.utils.parseEther("10")`, ethers.utils.parseEther("0.0001"));
-			console.log(`###: parsedAmount`, parsedAmount.toString());
-			console.log(`###: signer`, signer);
-			console.log(`###: StreamharbourContract.address`, StreamharbourContract.address);
-			console.log(`###: tokenBalance`, tokenBalance);
-			if (BigNumber.isBigNumber(tokenAllowance) && tokenAllowance.lt(parsedAmount)) {
-				await tokenContract.approve(StreamharbourContract.address, parsedAmount)
-			}
+			let approveTxData = tokenContract.interface.encodeFunctionData('approve', [streamHarbourContract.address, parsedAmount]);
+			let donateTxData = streamHarbourContract.interface.encodeFunctionData('donate', [streamerAddress, token?.address, parsedAmount, path]);
+			console.log(`###: donateTxData`, donateTxData);
+			console.log(`###: approveTxData`, approveTxData);
 
-			const donationTx = await streamHarbourContract.donate(
-				streamerAddress,
-				token.address,
-				parsedAmount,
-				path
-			)
+			try {
+				const value = amount && typeof amount === 'number' ? ethers.utils.parseEther(amount.toString()) : 0;
+				await etherspotSDK.batchExecuteAccountTransaction({
+					to: token.address,
+					data: approveTxData
+				});
 
-			donationTx.wait().then(e => {
+				await etherspotSDK.batchExecuteAccountTransaction({
+					to: StreamharbourContract.address,
+					data: donateTxData
+				});
+
+				await etherspotSDK.estimateGatewayBatch();
+
+				const submissionResponse = await etherspotSDK
+					.submitGatewayBatch()
+
 				toast.success('Your tip has been successfully send!')
-				resetForm();
-			}).catch(e => {
+				console.log(`###: submissionResponse`, submissionResponse);
+			} catch (e) {
+				console.log(e);
 				toast.error('Something went wrong');
+			} finally {
 				resetForm();
-			});
+			}
 		}
+
+		setIsSendingTransaction(false);
 
 	}
 
@@ -246,7 +275,7 @@ export default function DonationForm() {
 	}
 
 	function handleAmountChange(e) {
-		setAmount(e.target.value)
+		setAmount(Number(e.target.value));
 	}
 
 	function handleTokenChange(tokenSymbol) {
@@ -270,6 +299,17 @@ export default function DonationForm() {
 		getNativeToken().then(token => setNativeToken(token));
 
 	}, [donationForm])
+
+	useEffect(() => {
+		const state = etherspotSDK && etherspotSDK.state;
+
+		if (state) {
+			const {account} = state;
+			if (account.address) {
+				setIsEtherspotAccountConnected(true);
+			}
+		}
+	}, [etherspotSDK]);
 
 	return (
 		<Form form={donationForm} requiredMark={false} onFinish={sendTip} className={styles.form}>
@@ -330,7 +370,7 @@ export default function DonationForm() {
 			</Form.Item>
 
 			<Button
-				disabled={!token || !amount || isDisconnected || isSendNativeTransactionLoading}
+				disabled={!token || !amount || !isEtherspotAccountConnected || isSendingTransaction}
 				type="primary"
 				htmlType="submit"
 				className={styles.paybtn}
@@ -338,8 +378,8 @@ export default function DonationForm() {
 				block
 			>
 				<span>{
-					isSendNativeTransactionLoading ? 'Sending transaction ...' :
-						isDisconnected ? 'Connect Wallet' :
+					isSendingTransaction ? 'Sending transaction ...' :
+						!isEtherspotAccountConnected ? 'Connect Wallet' :
 							token ? (
 								amount ? `Donate ${amount} ${token.symbol}` : 'Enter amount'
 							) : `Select a token`}</span>

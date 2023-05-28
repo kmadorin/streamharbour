@@ -47,4 +47,6 @@ export const CHAIN_ID = IS_MAINNET ? POLYGON_MAINNET.id : POLYGON_MUMBAI.id
 export const TOKEN_LIST_URI = 'https://gateway.ipfs.io/ipns/tokens.uniswap.org';
 // export const TOKEN_LIST_MUMBAI_URI = 'https://raw.githubusercontent.com/viaprotocol/tokenlists/main/tokenlists/mumbai.json';
 
+export const WEB3_AUTH_CLIENT_ID = process.env.NEXT_PUBLIC_WEB3_AUTH_CLIENT_ID;
+
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'

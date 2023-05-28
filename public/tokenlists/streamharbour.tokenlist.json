@@ -5706,6 +5706,14 @@
       "logoURI": "https://assets.coingecko.com/coins/images/4713/thumb/matic-token-icon.png?1624446912"
     },
     {
+      "name": "Dummy ERC20",
+      "address": "0xfe4F5145f6e09952a5ba9e956ED0C25e3Fa4c7F1",
+      "symbol": "DERC20",
+      "decimals": 18,
+      "chainId": 80001,
+      "logoURI": "https://assets.coingecko.com/coins/images/4713/thumb/matic-token-icon.png?1624446912"
+    },
+    {
       "name": "Dai Stablecoin",
       "address": "0xcB1e72786A6eb3b44C2a2429e317c8a2462CFeb1",
       "symbol": "DAI",
