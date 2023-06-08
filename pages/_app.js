@@ -99,7 +99,7 @@ function App({Component, pageProps}) {
 			}
 		}
 
-		initEtherspot().catch((e) => {
+		initEtherspot().then(res => console.log('Etherspot successfully inited: ', res)).catch((e) => {
 			console.log('Init Etherspot error: ', e);
 		});
 
