@@ -68,6 +68,8 @@ function App({Component, pageProps}) {
 		async function initEtherspot() {
 			const web3AuthClientId = WEB3_AUTH_CLIENT_ID;
 
+			console.log(`###: WEB3_AUTH_CLIENT_ID`, WEB3_AUTH_CLIENT_ID);
+
 			const web3AuthInstance = new Web3AuthNoModal({
 				clientId: web3AuthClientId,
 				chainConfig: {
@@ -91,6 +93,8 @@ function App({Component, pageProps}) {
 
 			// Initialise the web3Auth instance after setting up the Adapter Configuration
 			await web3AuthInstance.init();
+
+			console.log(`###: web3AuthInstance`, web3AuthInstance);
 			setWeb3Auth(web3AuthInstance);
 
 			if (web3AuthInstance.provider) {
