@@ -12,6 +12,7 @@ export default function SocialSelector({setHasConnected}) {
 	const handleLogin = (social) => {
 		return (e) => {
 			// login_hint is optional parameter which accepts any string and can be set to null
+			console.log(`###: web3auth`, web3auth);
 			web3auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, {
 				loginProvider: social.toLowerCase(),
 			}).then(web3authProvider => {
