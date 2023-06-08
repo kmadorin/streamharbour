@@ -77,8 +77,6 @@ function App({Component, pageProps}) {
 				storageKey: 'local',
 			});
 
-			setWeb3Auth(web3AuthInstance);
-
 			const openLoginAdapter = new OpenloginAdapter({
 				adapterSettings: {
 					network: 'testnet',
@@ -92,7 +90,8 @@ function App({Component, pageProps}) {
 			web3AuthInstance.configureAdapter(openLoginAdapter);
 
 			// Initialise the web3Auth instance after setting up the Adapter Configuration
-			await web3AuthInstance.init()
+			await web3AuthInstance.init();
+			setWeb3Auth(web3AuthInstance);
 
 			if (web3AuthInstance.provider) {
 				setProvider(web3AuthInstance.provider);
