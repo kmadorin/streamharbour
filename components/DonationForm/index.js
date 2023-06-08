@@ -211,11 +211,13 @@ export default function DonationForm() {
 					data
 				});
 
-				await etherspotSDK.estimateGatewayBatch({
+				const estimation = await etherspotSDK.estimateGatewayBatch({
 					to: StreamharbourContract.address,
 					value: amount && typeof amount === 'number' ? ethers.utils.parseEther(amount.toString()) : 0,
 					data
 				});
+
+				console.log(`###: estimation`, estimation);
 
 				const submissionResponse = await etherspotSDK
 					.submitGatewayBatch()
